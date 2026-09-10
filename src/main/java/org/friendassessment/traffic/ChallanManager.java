@@ -1,0 +1,11 @@
+package org.friendassessment.traffic; import java.util.*; import java.util.concurrent.atomic.AtomicInteger;
+public class ChallanManager {
+ private final Map<String,RegisteredVehicle> vehicles=new HashMap<>();private final Map<String,EChallan> challans=new HashMap<>();private final Set<String> events=new HashSet<>();private final AtomicInteger seq=new AtomicInteger(500);
+ public void register(RegisteredVehicle v){if(v==null)throw new TrafficException("Vehicle required");if(vehicles.putIfAbsent(v.number(),v)!=null)throw new TrafficException("Duplicate vehicle");}
+ public EChallan record(Offence o){if(o==null)throw new TrafficException("Offence required");if(!vehicles.containsKey(o.vehicleNumber()))throw new TrafficException("Vehicle not registered");if(!events.add(o.eventId()))throw new TrafficException("Duplicate challan event");int repeats=(int)challans.values().stream().filter(c->c.offence().vehicleNumber().equals(o.vehicleNumber())&&c.offence().type()==o.type()).count();double fine=base(o)*(1+repeats*0.5);EChallan c=new EChallan("FC-"+seq.incrementAndGet(),o,fine);challans.put(c.id(),c);return c;}
+ private double base(Offence o){return switch(o.type()){case OVER_SPEEDING->switch(o.severity()){case LOW->1000;case MEDIUM->1500;case HIGH->2000;};case SIGNAL_VIOLATION->1500;case ILLEGAL_PARKING->500;};}
+ public void pay(String id){EChallan c=challans.get(id);if(c==null)throw new TrafficException("Challan not found");c.markPaid();}
+ public double outstanding(String number){String n=number.toUpperCase();return challans.values().stream().filter(c->c.offence().vehicleNumber().equals(n)&&c.state()==PaymentState.UNPAID).mapToDouble(EChallan::amount).sum();}
+ public RiskBand classify(String number){String n=number.toUpperCase();if(!vehicles.containsKey(n))throw new TrafficException("Vehicle not registered");long count=challans.values().stream().filter(c->c.offence().vehicleNumber().equals(n)).count();return count==0?RiskBand.SAFE:count<=2?RiskBand.LOW_RISK:count<=5?RiskBand.HIGH_RISK:RiskBand.REPEAT_OFFENDER;}
+ public List<EChallan> history(String number){String n=number.toUpperCase();return challans.values().stream().filter(c->c.offence().vehicleNumber().equals(n)).toList();}
+}

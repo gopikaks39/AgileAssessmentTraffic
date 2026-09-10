@@ -1,0 +1,1 @@
+package org.friendassessment.traffic; public record RegisteredVehicle(String number,String owner,VehicleKind kind){public RegisteredVehicle{if(number==null||number.isBlank()||owner==null||owner.isBlank()||kind==null)throw new IllegalArgumentException("Invalid vehicle information");number=number.trim().toUpperCase();owner=owner.trim();}}

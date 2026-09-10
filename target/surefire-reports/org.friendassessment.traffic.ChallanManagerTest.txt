@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.friendassessment.traffic.ChallanManagerTest
+-------------------------------------------------------------------------------
+Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.109 s -- in org.friendassessment.traffic.ChallanManagerTest

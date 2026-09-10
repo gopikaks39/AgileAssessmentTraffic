@@ -1,0 +1,12 @@
+org\friendassessment\traffic\ChallanManager$1.class
+org\friendassessment\traffic\EChallan.class
+org\friendassessment\traffic\VehicleKind.class
+org\friendassessment\traffic\Offence.class
+org\friendassessment\traffic\PaymentState.class
+org\friendassessment\traffic\App.class
+org\friendassessment\traffic\Severity.class
+org\friendassessment\traffic\OffenceType.class
+org\friendassessment\traffic\ChallanManager.class
+org\friendassessment\traffic\TrafficException.class
+org\friendassessment\traffic\RegisteredVehicle.class
+org\friendassessment\traffic\RiskBand.class
